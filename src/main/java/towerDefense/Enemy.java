@@ -17,8 +17,8 @@ public class Enemy {
     private float speed;
     private Color color;
     private int waypointIndex = 0; // Track the current waypoint index for movement
-    private Color colorBrown = new Color(165, 42, 42);
-    private Color colorSkyBlue = new Color(135, 206, 235);
+    private final Color colorBrown = new Color(165, 42, 42);
+    private final Color colorSkyBlue = new Color(135, 206, 235);
 
 
     static final Vector3d[] WAYPOINTS = {
@@ -61,6 +61,9 @@ public class Enemy {
         } else if (color.equals(colorSkyBlue)) {
             this.health = 200;
             this.speed = 1.4f;
+        } else if (color == Color.DARK_GRAY) {
+            this.health = 300;
+            this.speed = 1.0f;
         }
         this.speed *= (1.0f + (0.01f * this.currentLevel));
     }
@@ -89,26 +92,45 @@ public class Enemy {
 
     }
 
-    public void hit() {
-        if (this.health > 1) {
-            this.health--;
-            return;
-        }
+    public int hit(int bulletHealth) {
+        
         // Handle what happens when the enemy is hit by a bullet (e.g., reduce health, check for death)
         if (color == Color.RED) {
             alive = false;          // Enemy is destroyed
+            bulletHealth--;
         } else if (color == Color.ORANGE) {
-            color = Color.RED;      // Further damage indication
+            color = Color.RED;      // Further damage indication...
+            bulletHealth--;
         } else if (color == Color.YELLOW) {
-            color = Color.ORANGE;   // Further damage indication
+            color = Color.ORANGE;
+            bulletHealth--;
         } else if (color == Color.BLUE) {
-            color = Color.YELLOW;   // Further damage indication
+            color = Color.YELLOW;
+            bulletHealth--;
         } else if (color.equals(colorBrown)) {
             color = Color.BLUE;
+            bulletHealth--;
         } else if (color.equals(colorSkyBlue)) {
-            alive = false;
+            if (this.health > 1) {
+                this.health--;
+                bulletHealth--;
+            } else {
+                alive = false;
+                bulletHealth--;
+            }
+            return bulletHealth;
+        } else if (color == Color.DARK_GRAY) {
+            if (this.health > 0 && bulletHealth >= 2) {
+                this.health -= bulletHealth + 1;
+                bulletHealth = 0;
+                return bulletHealth;
+            } else if (this.health <= 0) {
+                color = Color.RED;
+                bulletHealth--;
+            }
         }
         setSpeedAndHealth(); // Update speed based on new color (health) after being hit
+        return bulletHealth;
 
     }
 

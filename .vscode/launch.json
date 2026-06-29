@@ -8,6 +8,13 @@
             "type": "java",
             "name": "Main",
             "request": "launch",
+            "mainClass": "towerDefense.Main",
+            "projectName": "java_tower_defense_3873dc08"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
             "mainClass": "Main",
             "projectName": "java_tower_defense_3873dc08"
         },

@@ -17,7 +17,7 @@ public class MagicTower extends Tower {
         this.innerColorRGB = 250;
         this.bulletSize = 15;
         this.bulletHealth = 6;
-        this.cooldownTime = 200;
+        this.cooldownTime = 150;
     }
 
     @Override
@@ -49,8 +49,8 @@ public class MagicTower extends Tower {
         if (this.innerColorRGB > 0) {
             incLevel();
             this.innerColorRGB -= 25;
-            this.cooldownTime -= 12;
             this.innerColor = new Color(innerColorRGB, innerColorRGB, innerColorRGB);
+            this.cooldownTime -= 10;
             this.bulletSpeed += 0.15f;
             this.bulletHealth += 1;
             this.range += 3;

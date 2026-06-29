@@ -5,6 +5,7 @@ import java.awt.*;
 public enum TD_Colors {
     RED(Color.RED),
     GRAY(Color.LIGHT_GRAY),
+    DARKGREY(Color.DARK_GRAY),
     BLUE(Color.BLUE),
     GREEN(Color.GREEN),
     WHITE(Color.WHITE),

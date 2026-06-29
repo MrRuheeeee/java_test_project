@@ -369,7 +369,7 @@ public class GamePanel extends JPanel {
                 g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
 
                 // Text right-aligned
-                String text = "50 $";
+                String text = logic.sellPrice + " $";
                 g2d.setFont(getFont());
                 g2d.setColor(frameColor);
                 FontMetrics fm = g2d.getFontMetrics();
@@ -421,7 +421,7 @@ public class GamePanel extends JPanel {
                 g2d.fillPolygon(xPoints, yPoints, 3);
 
                 // Frame
-                Color frameColor = (logic != null && logic.money >= 50)
+                Color frameColor = (logic != null && logic.money >= logic.upgradePrice)
                     ? TD_Colors.DARK_GREEN.color  // green
                     : TD_Colors.CUSTOM_ORANGE.color; // orange
                 g2d.setColor(frameColor);
@@ -429,7 +429,7 @@ public class GamePanel extends JPanel {
                 g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
 
                 // Text right-aligned
-                String text = "50 $";
+                String text = logic.upgradePrice + " $";
                 g2d.setFont(getFont());
                 g2d.setColor(frameColor);
                 FontMetrics fm = g2d.getFontMetrics();
@@ -634,7 +634,8 @@ public class GamePanel extends JPanel {
             for (Tower t : logic.tower) {
                 // looks for identical position
                 if (t.pos.idt(tp)) {
-                    logic.money += 50;
+                    logic.money += logic.sellPrice;
+                    logic.sellPrice += 10;
                     logic.tower.remove(t);
                     occupied[gridX][gridY] = false;
                     repaint();
@@ -653,9 +654,10 @@ public class GamePanel extends JPanel {
             for (Tower t : logic.tower) {
                 // looks for identical position
                 if (t.pos.idt(tp)) {
-                    if (logic.money >= 50) {
+                    if (logic.money >= logic.upgradePrice) {
                         if (t.Upgrade()) {
-                            logic.money -= 50;
+                            logic.money -= logic.upgradePrice;
+                            logic.upgradePrice += 5;
                             repaint();
                         }
                     }                    

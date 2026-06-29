@@ -6,11 +6,10 @@ import java.awt.Composite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-
+import towerDefense.Bullet;
+import towerDefense.Enemy;
 import towerDefense.TD_Colors;
 import towerDefense.Vector3d;
-import towerDefense.Enemy;
-import towerDefense.Bullet;
 
 public abstract class Tower {
 
@@ -81,8 +80,7 @@ public abstract class Tower {
     }
 
     public void drawRange(Graphics g) {
-        if (g instanceof Graphics2D) {
-            Graphics2D g2d = (Graphics2D) g;
+        if (g instanceof Graphics2D g2d) {
             Composite oldComposite = g2d.getComposite();
             Color oldColor = g2d.getColor();
 

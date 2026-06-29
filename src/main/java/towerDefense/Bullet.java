@@ -6,12 +6,12 @@ import java.util.ArrayList;
 public class Bullet {
     Vector3d pos;
     Vector3d movement;
-    float targetX, targetY;
+    // float targetX, targetY;
     float speed;
     Color color;
     int size;
     int health;
-    double directionX, directionY;
+    // double directionX, directionY;
     boolean hit = false;
     Enemy lastHitEnemy = null;
 
@@ -34,27 +34,16 @@ public class Bullet {
                 }
 
                 lastHitEnemy = enemy;
-                enemy.hit();
+                this.health = enemy.hit(this.health);
                 this.hit = true;
 
-                if (this.health < 2) {
-                    return true; // Remove the bullet
-                } else {
-                    this.health--;
-                    return false;
-                }
+                return this.health <= 0;// Remove the bullet
             }
         }
 
         lastHitEnemy = null;
         // Remove the bullet if it goes off-screen
-        if (pos.x <= -10)
-            return true;
-        if (pos.x >= 810)
-            return true;
-        if (pos.y <= -10)
-            return true;
-        if (pos.y >= 610)
+        if (pos.x <= -10 || pos.x >= 810 || pos.y <= -10 || pos.y >= 610)
             return true;
         // Keep the bullet if it didn't hit anything
         return false;
@@ -71,6 +60,7 @@ public class Bullet {
         g.drawRoundRect((int)pos.x - (this.size / 2), (int)pos.y - (this.size / 2), this.size, this.size, 20, 20);
     }
 
+    @Override
     public String toString() {
         return "Bullet[pos:"+pos.toString()+", move:"+movement.toString()+"]";
     }
