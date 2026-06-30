@@ -2,22 +2,25 @@ package towerDefense.towers;
 
 import java.awt.Color;
 import java.util.ArrayList;
-
+import towerDefense.Bullet;
+import towerDefense.Enemy;
 import towerDefense.TD_Colors;
 import towerDefense.Vector3d;
-import towerDefense.Enemy;
-import towerDefense.Bullet;
 
 public class SuperTower extends Tower {
     
     public SuperTower(Vector3d pos) {
-        super(pos, "Super", TD_Colors.GREEN, 100);
-        this.bulletSpeed = 4.5f;
-        this.innerColor = Color.WHITE;
-        this.innerColorRGB = 250;
-        this.bulletSize = 5;
-        this.bulletHealth = 1;
-        this.cooldownTime = 15;
+        super(
+            pos,
+            "Super",
+            TD_Colors.GREEN,
+            100,
+            4.5f,
+            5,
+            1,
+            1,
+            15
+        );
     }
 
     @Override
@@ -38,7 +41,15 @@ public class SuperTower extends Tower {
 
         if (first != null) {
             Vector3d p = pos.cpy().add(20, 20,0);
-            bullets.add(new Bullet(p, first.pos, this.bulletSpeed, TD_Colors.BLUE, this.bulletSize, 1));
+            bullets.add(new Bullet(
+                p, 
+                first.pos, 
+                this.bulletSpeed, 
+                TD_Colors.BLUE, 
+                this.bulletSize, 
+                this.bulletHealth,
+                this.bulletDamage
+            ));
             cooldown = this.cooldownTime; // Reset cooldown
         }
     }  
@@ -52,10 +63,13 @@ public class SuperTower extends Tower {
             this.innerColor = new Color(innerColorRGB, innerColorRGB, innerColorRGB);
             this.bulletSpeed += 0.35f;
             this.range += 1;
-            // 4 times (0, 3, 6, 9)
-            if ((getLevel() % 3) == 0) {
+            // 4 times (1, 4, 7, 10)
+            if ((getLevel() % 3) == 1) {
                 this.bulletSize += 1;
-                this.range += 1;
+                this.range += 2;
+            }
+            if (getLevel() == 10) {
+                this.bulletDamage++;
             }
             return true;
         }

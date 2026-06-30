@@ -21,6 +21,7 @@ public abstract class Tower {
     String type;
     int cooldown = 0; // Cooldown timer for tower attacks
     int range;
+    int bulletDamage;
     
     float bulletSpeed = 1f;
     int bulletSize = 7;
@@ -29,13 +30,28 @@ public abstract class Tower {
     int innerColorRGB = 250;
     int currentTowerLevel = 0;
     
-    public Tower(Vector3d pos, String type, TD_Colors color, int range) {
+    public Tower(
+        Vector3d pos,
+        String type,
+        TD_Colors color,
+        int range,
+        float bulletSpeed,
+        int bulletSize,
+        int bulletHealth,
+        int bulletDamage,
+        int cooldownTime
+    ) {
         this.pos = pos;
         this.type = type;
         this.outerColor = color.color;
         this.innerColor = TD_Colors.WHITE.color;
         this.range = range;
-        
+        this.bulletSpeed = bulletSpeed;
+        this.bulletSize = bulletSize;
+        this.bulletHealth = bulletHealth;
+        this.bulletDamage = bulletDamage;
+        this.cooldownTime = cooldownTime;
+        this.innerColorRGB = 250; // Default inner color RGB
         this.cooldown = 0; // Initialize cooldown
     }
 

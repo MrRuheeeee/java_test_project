@@ -1,6 +1,5 @@
 package towerDefense;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -12,11 +11,11 @@ public class GameLogic {
     public ArrayList<Enemy> enemies = new ArrayList<>();
     public ArrayList<Tower> tower = new ArrayList<>();
     public ArrayList<Bullet> bullets = new ArrayList<>();
-    public int money = 0;
+    public int money = 50;
     public int sellPrice = 50;
     public int upgradePrice = 50;
     public int towerPrice = 0;
-    public int towerPriceArrow = 0;
+    public int towerPriceArrow = 30;
     public int towerPriceCannon = 40;
     public int towerPriceMagic = 60;
     public int towerPriceSuper = 80;
@@ -24,30 +23,30 @@ public class GameLogic {
     public int timerSpeed = 33;
     public int currentLevel = 0;
 
-    private final ArrayList<TD_Colors> spawnQueue = new ArrayList<>();
+    private final ArrayList<Integer> spawnQueue = new ArrayList<>();
     private final Random random = new Random();
     private boolean increaseLevel = true;
     private int spawnCooldown = 0;
     private int[] currentLevelConfig = {0, 0, 0, 0, 0, 0, 0};
     public int [][] levels = {
         // skip first level, cause i`m sloppy
-        {}, // red, orange, yellow, blue
-        {4, 0, 0, 0, 0, 0, 0},       // lvl 1
-        {6, 0, 0, 0, 0, 0, 0},       // lvl 2
-        {7, 0, 0, 0, 0, 0, 0},       // lvl 3
-        {3, 2, 0, 0, 0, 0, 0},       // lvl 4
-        {5, 4, 0, 0, 0, 0, 0},       // lvl 5
-        {5, 9, 1, 0, 0, 0, 0},       // lvl 6
-        {8, 8, 3, 0, 0, 0, 0},      // lvl 7
-        {16,4, 4, 0, 0, 0, 0},      // lvl 8
-        {14,5, 5, 0, 0, 0, 0},      // lvl 9
-        {12,6, 6, 1, 0, 0, 0},      // lvl 10
-        {9, 4, 4, 0, 0, 0, 0},       // lvl 11
-        {8, 4, 5, 2, 0, 0, 0},       // lvl 12
-        {4, 12,8, 4, 0, 0, 0},      // lvl 13
-        {9, 9, 10,0, 0, 0, 0},      // lvl 14
-        {5, 5, 3, 8, 0, 0, 0},       // lvl 15
-        {1, 1, 1, 1, 0, 0, 0},       // lvl 16   
+        {}, // red, orange, yellow, blue, skyeblue, darkgrey
+        {5, 0, 0, 0, 0, 0, 0},       // lvl 1
+        {7, 0, 0, 0, 0, 0, 0},       // lvl 2
+        {8, 0, 0, 0, 0, 0, 0},       // lvl 3
+        {14,1, 0, 0, 0, 0, 0},       // lvl 4
+        {24,2, 0, 0, 0, 0, 0},       // lvl 5
+        {16,6, 0, 0, 0, 0, 0},       // lvl 6
+        {14,8, 1, 0, 0, 0, 0},      // lvl 7
+        {12,7, 12, 0, 0, 0, 0},      // lvl 8
+        {16,4, 3, 0, 0, 0, 0},      // lvl 9
+        {14,5, 4, 0, 0, 0, 0},      // lvl 10
+        {18,8, 5, 0, 0, 0, 0},       // lvl 11
+        {9, 4, 4, 1, 0, 0, 0},       // lvl 12
+        {8, 4, 5, 2, 0, 0, 0},      // lvl 13
+        {4, 12,8, 4, 0, 0, 0},      // lvl 14
+        {9, 9, 10,0, 0, 0, 0},       // lvl 15
+        {5, 5, 3, 8, 0, 0, 0},       // lvl 16   
         {10,10,10,10,0, 0, 0},     // lvl 17
         {5, 3, 1, 0, 1, 0, 0},       // lvl 18
         {12,3, 1, 0, 0, 0, 0},      // lvl 19
@@ -68,11 +67,23 @@ public class GameLogic {
         {6, 7, 6, 7, 0, 0, 0},       // lvl 34
         {6, 7, 67,6, 7, 0, 0},      // lvl 35
         {20,20,20,10,10,0, 0},       // lvl 36
-        {0, 50,50,10,10,0, 0},       // lvl 37
-        {0, 0, 50,50,10,0, 0},       // lvl 38
-        {0, 0, 0, 50,50,0, 0},       // lvl 39
+        {0, 20,20,10,10,0, 0},       // lvl 37
+        {0, 0, 20,20,10,0, 0},       // lvl 38
+        {0, 0, 0, 20,20,0, 0},       // lvl 39
         {0, 0, 0, 0, 0, 1, 0},       // lvl 40
-        {0, 0, 0, 0, 0, 0, 1},       // lvl 41
+        {99,10,6, 7, 5, 0, 0},       // lvl 41
+        {10,20,15,25,15,0, 0},       // lvl 42
+        {5, 5, 5, 5, 5, 1, 0},       // lvl 43
+        {20,8, 2, 10,30,0, 0},       // lvl 44
+        {10,10,0, 35,8, 0, 0},       // lvl 45
+        {50,50,0, 0, 0, 2, 0},       // lvl 46
+        {6, 7, 67,6, 7, 0, 0},       // lvl 47
+        {16,22,26,34,38,1, 0},       // lvl 48
+        {30,20,10,10,20,2, 0},       // lvl 49
+        {0, 0, 0, 0, 0, 0, 1},       // lvl 50
+        {0,10,10,20,10, 4, 0},       // lvl 51
+        {8,50,40,30,70, 1, 0},       // lvl 52
+        {0, 0, 0, 0, 0, 1, 1},       // lvl 53
 
     };
 
@@ -83,22 +94,22 @@ public class GameLogic {
         this.panel = panel;
     }
 
-    private int calculateCooldown(Color c) {
+    private int calculateCooldown(int health) {
         int base;
-        if (c == Color.RED) {
+        if (health == 1) {
             base = 150;
-        } else if (c == Color.ORANGE) {
+        } else if (health == 2) {
             base = 200;
-        } else if (c == Color.YELLOW) {
+        } else if (health == 3) {
             base = 250;
-        } else if (c == Color.BLUE) { // blue
+        } else if (health == 4) { // blue
             base = 300;
-        } else if (c == TD_Colors.BROWN.color) {
+        } else if (health <= 10) {
             base = 350;
-        } else if (c == TD_Colors.SKY_BLUE.color) {
+        } else if (health == (currentLevel * 10)) {
             base = 15000;
-        } else if (c == Color.DARK_GRAY) {
-            base = 20000;
+        } else if (health == (currentLevel * 20)) {
+            base = 40000;
         } else {
             base = 67; // shouldnt exist
         }
@@ -121,9 +132,9 @@ public class GameLogic {
                 if (!enemies.isEmpty()) {
                     return;
                 }
-                
+
+                money += currentLevel * 13;
                 currentLevel++;
-                money += 10;
 
                 if (currentLevel >= levels.length) {
                     GamePanel.gameOver = true;
@@ -141,26 +152,27 @@ public class GameLogic {
 
             spawnQueue.clear();
 
-            TD_Colors[] colors = {
-                TD_Colors.RED, 
-                TD_Colors.ORANGE, 
-                TD_Colors.YELLOW, 
-                TD_Colors.BLUE, 
-                TD_Colors.BROWN, 
-                TD_Colors.SKY_BLUE, 
-                TD_Colors.DARKGREY,
+            int[] enemyHealth = {
+                1,
+                2,
+                3,
+                4,
+                this.currentLevel / 2,
+                10 * currentLevel,
+                20 * currentLevel,
             };
+
             for (int i = 0; i < currentLevelConfig.length; i++) {
                 for (int j = 0; j < currentLevelConfig[i]; j++) {
-                spawnQueue.add(colors[i]);
+                spawnQueue.add(enemyHealth[i]);
                 }
             }
             Collections.shuffle(spawnQueue, random);
 
         } else {
-            TD_Colors next = spawnQueue.removeFirst();
+            int next = spawnQueue.removeFirst();
             enemies.add(new Enemy(next, currentLevel));
-            spawnCooldown = calculateCooldown(next.color);
+            spawnCooldown = calculateCooldown(next);
         }
 
     }

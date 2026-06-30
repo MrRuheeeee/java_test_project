@@ -34,37 +34,44 @@ public class Enemy {
         new Vector3d(0, 0, 0),  // extra waypoint - might not be too clean but it works ;)
     };
 
-    public Enemy(TD_Colors color, int currentLevel) {
+    public Enemy(int health, int currentLevel) {
         this.pos = WAYPOINTS[0].cpy(); // Start y position
-        this.color = color.color;
-        setSpeedAndHealth();
+        this.health = health;
         this.movement = WAYPOINTS[1].cpy().nor().scl(speed);
         this.currentLevel = currentLevel;
+        setSpeedAndColor();
     }
     
-    private void setSpeedAndHealth() {
-        if (color == Color.RED) {
-            this.health = 1;
+    private void setSpeedAndColor() {
+        if (this.health <= 0) {
+            this.alive = false;
+        } else if (this.health == 1) {
+            this.color = Color.RED;
             this.speed = 1.8f;
-        } else if (color == Color.ORANGE) {
-            this.health = 1;
-            this.speed = 2.5f;
-        } else if (color == Color.YELLOW) {
-            this.health = 1;
-            this.speed = 3.2f;
-        } else if (color == Color.BLUE) {
-            this.health = 1;
+        } else if (this.health == 2) {
+            this.color = Color.ORANGE;
+            this.speed = 2.2f;
+        } else if (this.health == 3) {
+            this.color = Color.YELLOW;
+            this.speed = 2.8f;
+        } else if (this.health == 4) {
+            this.color = Color.BLUE;
             this.speed = 4.0f;
-        } else if (color.equals(colorBrown)) {
-            this.health = 10;
+        } else if (this.health <= (this.currentLevel / 2)) {
+            this.color = colorBrown;
             this.speed = 2.3f;
-        } else if (color.equals(colorSkyBlue)) {
-            this.health = 200;
+        } else if (this.health <= (10 * (this.currentLevel + 1))) {
+            this.color = colorSkyBlue;
             this.speed = 1.4f;
-        } else if (color == Color.DARK_GRAY) {
-            this.health = 300;
+        } else if (this.health <= (20 * (this.currentLevel + 1))) {
+            this.color = Color.DARK_GRAY;
             this.speed = 1.0f;
+        } else {
+            // shouldnt exist, but just in case its white and stands out
+            this.color = Color.WHITE;
+            this.speed = 0.5f;
         }
+        System.out.println("enemy health: " + this.health); 
         this.speed *= (1.0f + (0.01f * this.currentLevel));
     }
 
@@ -92,50 +99,15 @@ public class Enemy {
 
     }
 
-    public int hit(int bulletHealth) {
-        
-        // Handle what happens when the enemy is hit by a bullet (e.g., reduce health, check for death)
-        if (color == Color.RED) {
-            alive = false;          // Enemy is destroyed
-            bulletHealth--;
-        } else if (color == Color.ORANGE) {
-            color = Color.RED;      // Further damage indication...
-            bulletHealth--;
-        } else if (color == Color.YELLOW) {
-            color = Color.ORANGE;
-            bulletHealth--;
-        } else if (color == Color.BLUE) {
-            color = Color.YELLOW;
-            bulletHealth--;
-        } else if (color.equals(colorBrown)) {
-            color = Color.BLUE;
-            bulletHealth--;
-        } else if (color.equals(colorSkyBlue)) {
-            if (this.health > 1) {
-                this.health--;
-                bulletHealth--;
-            } else {
-                alive = false;
-                bulletHealth--;
-            }
-            return bulletHealth;
-        } else if (color == Color.DARK_GRAY) {
-            if (this.health > 0 && bulletHealth >= 2) {
-                this.health -= bulletHealth + 1;
-                bulletHealth = 0;
-                return bulletHealth;
-            } else if (this.health <= 0) {
-                color = Color.RED;
-                bulletHealth--;
-            }
-        }
-        setSpeedAndHealth(); // Update speed based on new color (health) after being hit
-        return bulletHealth;
+    public void hit(int bulletDamage) {
+        this.health -= bulletDamage;
+        System.out.println(this.health);
+        setSpeedAndColor(); // Update speed & color       
 
     }
 
     public void draw(Graphics g) {
-        g.setColor(color);
+        g.setColor(this.color);
         int drawX = (int) pos.x - 15;  // Center the circle at (x, y)
         int drawY = (int) pos.y - 15;  // Center the circle at (x, y)
         g.fillOval(drawX, drawY, 30, 30);

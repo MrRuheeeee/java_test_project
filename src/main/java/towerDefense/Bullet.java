@@ -11,17 +11,19 @@ public class Bullet {
     Color color;
     int size;
     int health;
+    int damage;
     // double directionX, directionY;
     boolean hit = false;
     Enemy lastHitEnemy = null;
 
-    public Bullet(Vector3d pos, Vector3d destination, float speed, TD_Colors color, int size, int health) {
+    public Bullet(Vector3d pos, Vector3d destination, float speed, TD_Colors color, int size, int health, int damage) {
         this.pos = pos.cpy();
         this.speed = speed;
         this.movement = destination.cpy().sub(this.pos).nor().scl(this.speed);
         this.color = color.color;
         this.size = size;
         this.health = health;
+        this.damage = damage;
     }
 
     public boolean bulletInteraction(ArrayList<Enemy> enemies) {
@@ -34,7 +36,8 @@ public class Bullet {
                 }
 
                 lastHitEnemy = enemy;
-                this.health = enemy.hit(this.health);
+                enemy.hit(damage);
+                this.health--;
                 this.hit = true;
 
                 return this.health <= 0;// Remove the bullet
@@ -43,10 +46,8 @@ public class Bullet {
 
         lastHitEnemy = null;
         // Remove the bullet if it goes off-screen
-        if (pos.x <= -10 || pos.x >= 810 || pos.y <= -10 || pos.y >= 610)
-            return true;
         // Keep the bullet if it didn't hit anything
-        return false;
+        return pos.x <= -10 || pos.x >= 810 || pos.y <= -10 || pos.y >= 610;
     }
 
     public void move() {

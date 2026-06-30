@@ -2,22 +2,25 @@ package towerDefense.towers;
 
 import java.awt.Color;
 import java.util.ArrayList;
-
+import towerDefense.Bullet;
+import towerDefense.Enemy;
 import towerDefense.TD_Colors;
 import towerDefense.Vector3d;
-import towerDefense.Enemy;
-import towerDefense.Bullet;
 
 public class ArrowTower extends Tower {
 
     public ArrowTower(Vector3d pos) {
-        super(pos, "Arrow", TD_Colors.RED, 140);
-        this.bulletSpeed = 10f;
-        this.innerColor = Color.WHITE;
-        this.innerColorRGB = 250;
-        this.bulletSize = 7;
-        this.bulletHealth = 1;
-        this.cooldownTime = 42;        
+        super(
+            pos, 
+            "Arrow", 
+            TD_Colors.RED, 
+            140,
+            10f,
+            7,
+            1,
+            1,
+            41
+        );
     }
 
     @Override
@@ -39,7 +42,15 @@ public class ArrowTower extends Tower {
         if (first != null) {
             Vector3d p = pos.cpy().add(20, 20,0);
             // Vector3d aim = getAimSpot(first, 6.7f);
-            bullets.add(new Bullet(p, first.pos, this.bulletSpeed, TD_Colors.WHITE, 7, this.bulletHealth));
+            bullets.add(new Bullet(
+                p, 
+                first.pos, 
+                this.bulletSpeed, 
+                TD_Colors.WHITE, 
+                7, 
+                this.bulletHealth, 
+                this.bulletDamage
+            ));
             cooldown = this.cooldownTime; // Reset cooldown
         }
     }  
@@ -54,8 +65,10 @@ public class ArrowTower extends Tower {
             this.bulletSpeed += 0.13f;
             this.range += 3;
             // one time at 5 upgrades
-            if (getLevel() == 5) {
-                this.bulletHealth += 1;
+            if (getLevel() == 2) {
+                this.bulletHealth++;
+            } else if (getLevel() == 7) {
+                this.bulletDamage++;
             }
             return true;
         }

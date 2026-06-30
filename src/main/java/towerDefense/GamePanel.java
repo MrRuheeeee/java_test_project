@@ -657,7 +657,7 @@ public class GamePanel extends JPanel {
                     if (logic.money >= logic.upgradePrice) {
                         if (t.Upgrade()) {
                             logic.money -= logic.upgradePrice;
-                            logic.upgradePrice += 5;
+                            logic.upgradePrice += 1;
                             repaint();
                         }
                     }                    
